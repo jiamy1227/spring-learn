@@ -1,5 +1,6 @@
 package com.jiamy.apolearn.service;
 
+import com.jiamy.apolearn.annotation.MetricTime;
 import com.jiamy.apolearn.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,9 @@ public class UserService {
         this.mailService = mailService;
     }
 
-    public void login(User user){
-
+    @MetricTime("login")
+    public void login(User user) throws InterruptedException {
+        Thread.sleep(1000);
         mailService.sendLoginMail(user);
 
     }

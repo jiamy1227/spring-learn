@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * @description:
@@ -14,8 +15,9 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 @ComponentScan
+@EnableAspectJAutoProxy
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ApplicationContext context = new AnnotationConfigApplicationContext(App.class);
         UserService userService = context.getBean(UserService.class);
         User user = new User(2L, "Jack", "123456");
