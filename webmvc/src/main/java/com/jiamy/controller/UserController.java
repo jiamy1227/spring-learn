@@ -4,10 +4,7 @@ import com.jiamy.dto.User;
 import com.jiamy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -20,12 +17,30 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserService userService; // field inject
 
     @GetMapping("/get")
     public ModelAndView getById(@RequestParam("id") String id){
         return new ModelAndView("user").addObject("user", userService.getById(id));
 
+    }
+
+    @GetMapping(value = "getRest",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getUserRest(){
+        return "{\"restSupport\":true}";
+    }
+
+    @GetMapping(value = "getStr")
+    @ResponseBody
+    public String getUserStr(@RequestParam("id") String id){
+        return userService.getById(id).toString();
+    }
+
+    @GetMapping(value = "getObject", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public User getUserObject(@RequestParam("id") String id){
+        return userService.getById(id);
     }
 
 }
