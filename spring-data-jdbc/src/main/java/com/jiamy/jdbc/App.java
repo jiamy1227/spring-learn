@@ -2,6 +2,7 @@ package com.jiamy.jdbc;
 
 import com.jiamy.jdbc.dto.User;
 import com.jiamy.jdbc.service.UserService;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,6 +20,7 @@ import java.util.List;
 @Component
 @ComponentScan
 @EnableTransactionManagement
+@MapperScan("com.jiamy.*.mapper")
 public class App {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(App.class);
@@ -44,6 +46,9 @@ public class App {
 
         System.out.println("test transactionManager2");
         userService.updateByNameTx2("jiamy");
+
+        System.out.println("mybatis ......");
+        System.out.println(userService.getUserBYMapper("7").toString());
 
 
     }

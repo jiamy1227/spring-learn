@@ -1,6 +1,7 @@
 package com.jiamy.jdbc.service;
 
 import com.jiamy.jdbc.dto.User;
+import com.jiamy.jdbc.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,8 @@ public class UserService {
 
     @Autowired
     PlatformTransactionManager txManager;
+    @Autowired
+    UserMapper userMapper;
 
     /**
      * jdbcTemplate.queryForObject
@@ -81,7 +84,7 @@ public class UserService {
             tx = txManager.getTransaction(new DefaultTransactionDefinition());
             result = jdbcTemplate.update("update user set email=? where name= ?", "jiamy1227", "jiamy");
             // sqlException
-            jdbcTemplate.update("update user123 set email=? where name= ?", "jiamy1227", "jiamy");
+            //jdbcTemplate.update("update user123 set email=? where name= ?", "jiamy1227", "jiamy");
             txManager.commit(tx);
         } catch (Exception e) {
             txManager.rollback(tx);
@@ -95,7 +98,11 @@ public class UserService {
 
         result = jdbcTemplate.update("update user set email=? where name= ?", "Billie2", "jiamy");
         // sqlException
-        jdbcTemplate.update("update user123 set email=? where name= ?", "Sandy", "jiamy");
+        //jdbcTemplate.update("update user123 set email=? where name= ?", "Sandy", "jiamy");
         return result;
+    }
+
+    public User getUserBYMapper(String id){
+        return userMapper.getUserById(id);
     }
 }
