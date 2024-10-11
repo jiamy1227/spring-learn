@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/userRest")
+// 浏览器同源安全策略会屏蔽非同源接口的响应，而是否允许跨域访问可以由服务端在响应头中添加 cross-access-allow ： aaa.com/ * 控制
+// controller层注解，filter都可以，还有webmvcconfiger添加crossmapping
 // @CrossOrigin(origins="*")
 public class UserRestController {
 
