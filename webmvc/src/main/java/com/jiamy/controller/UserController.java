@@ -25,6 +25,12 @@ public class UserController {
 
     }
 
+    @GetMapping("/getByName")
+    public ModelAndView getByName(@RequestParam("name") String name){
+        return new ModelAndView("user").addObject("user", userService.getByName(name));
+
+    }
+
     @GetMapping(value = "getRest",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getUserRest(){

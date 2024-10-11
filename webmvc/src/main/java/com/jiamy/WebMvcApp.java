@@ -3,6 +3,7 @@ package com.jiamy;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.servlet.ServletContext;
+import org.aopalliance.intercept.Interceptor;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
@@ -21,8 +22,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.TemplateEngine;
@@ -45,9 +48,6 @@ import java.io.File;
 @EnableWebMvc
 @PropertySource("classpath:jdbc.properties")
 @MapperScan("com.jiamy.mapper")
-/**
- * 多模块工程时，启动类要指定working directory
- */
 public class WebMvcApp {
 
     @Value("${jdbc.url}")
@@ -61,6 +61,10 @@ public class WebMvcApp {
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(Integer.getInteger("port", 8080));
         tomcat.getConnector();
+
+        /**
+         * 多模块工程时，启动类要指定working directory到当前模块(默认是工程目录)
+         */
         Context ctx = tomcat.addWebapp("", new File("src/main/web").getAbsolutePath());
         WebResourceRoot resources = new StandardRoot(ctx);
         resources.addPreResources(
@@ -92,11 +96,18 @@ public class WebMvcApp {
     }
 
     @Bean
-    WebMvcConfigurer createWebMvcConfigurer() {
+    WebMvcConfigurer createWebMvcConfigurer(@Autowired HandlerInterceptor[] handlerInterceptors) {
         return new WebMvcConfigurer() {
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+            };
+
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                for(HandlerInterceptor handlerInterceptor: handlerInterceptors) {
+                    registry.addInterceptor(handlerInterceptor);
+                }
             }
         };
     }

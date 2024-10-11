@@ -19,4 +19,8 @@ public class UserService {
     public User getById(String id){
         return userMapper.getById(id);
     }
+
+    public User getByName(String name){
+        return userMapper.getByName(name);
+    }
 }
