@@ -13,6 +13,7 @@
     <module>aoplearn</module>
     <module>spring-data-jdbc</module>
     <module>webmvc</module>
+      <module>jms</module>
   </modules>
 
   <dependencyManagement>
